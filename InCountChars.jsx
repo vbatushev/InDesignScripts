@@ -45,7 +45,7 @@ try {
 		var strNoSaveFile = localize({en: 'File is not saved', ru: 'Файл не сохранен!'});
 		var strFileSaveAs = localize({en: 'File save as', ru: 'Файл сохранен как'});
 		var strCreatedWith = localize({en: 'Created with script', ru: 'Создано с помощью скрипта'});
-		var strCredits = localize({en: 'by Vitaly Batushev (http://szam5.com)', ru: 'Виталий Батушев (http://szam5.com)'});
+		var strCredits = localize({en: 'by Vitaly Batushev (https://github.com/vbatushev/)', ru: 'Виталий Батушев (https://github.com/vbatushev/)'});
 		var strBars = localize({en: '===============================', ru: '==============================='});
 	} else {
 		var strMinWords = 'Minimum words in Story';
@@ -166,7 +166,7 @@ try {
 	strCreatedWith + ' ' + ScriptName + '\n' + strCredits;
 	alert (txtReport, ScriptName);
 
-	var myResultFile = new File (activeDocument.filePath + "/Otchet.txt");
+	var myResultFile = new File (activeDocument.filePath + "/Report.txt");
 	myResultFile.encoding = 'UTF16';	
 	myResultFile.open("w");		
 	myResultFile.write(txtReport);
