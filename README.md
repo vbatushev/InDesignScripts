@@ -1,4 +1,4 @@
-###ExportInfoblock
+###ExportInfoblocks
 
 Экспорт текста публикации в формат CSV по информационным блокам согласно стилям, определяемым в массиве ExportInfoblock.config.styles. Исходное задание: http://forum.rudtp.ru/threads/indesign-to-csv.65159/
 
