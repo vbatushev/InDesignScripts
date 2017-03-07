@@ -1,160 +1,148 @@
 ﻿/*
-* @Author: vbatushev
-* @Date:   2015-09-01 09:25:06
-* @version:    2.0
-* @Last Modified by:   vbatushev
-* @Last Modified time: 2015-12-07 02:40:49
+ * @Author: Vitaly Batushev
+ * @Date:   2015-09-01 09:25:06
+ * @Version:    3.0
+ * @Last Modified by: Vitaly Batushev
+ * @Last Modified time: 2017-03-07 20:42:24
 */
 
-// Список исключаемых символов по умолчанию.
-// Пишется в формате GREP. Можно использовать GREP-символы Adobe InDesign.
-// При перечислении символы разделяются символом |
-var excludeSymbols = "~-";
+var InCounts = (function() {
+    var excludeSymbols = "~-";
+    var chars = {spaces: 0, symbols: 0, total: 0, lines: 0}
 
-app.scriptPreferences.enableRedraw = true;
-var strings = {
-    name: 'inCountChars 2.0',
-    minWords: 'Minimum words in Story',
-    viewWithOutSpaces: 'Show numbers characters without spaces',
-    viewWithOutSpecial: 'Show numbers characters without special symbols',
-    attention: 'Attention!',
-    noOpenDocument: 'No open documents!',
-    report: 'Report',
-    publication: 'Publication',
-    charsWithSpaces: 'characters with spaces',
-    charsWithoutSpaces: 'characters without spaces',
-    charsWithoutSymbols: 'characters exclude',
-    authorLists: 'Authors lists',
-    lessOneList: 'less than one authors list',
-    saveReport: 'Save report in file?',
-    textFiles: 'Text Files',
-    selectResultFile: 'Save Report File',
-    endWork: 'Report created!',
-    noSaveFile: 'File is not saved',
-    fileSaveAs: 'File save as',
-    createdWith: 'Created with script',
-    credits: 'by Vitaly Batushev (https://github.com/vbatushev/InDesignScripts)',
-    bars: '===============================',
-}
-
-if (app.documents.length < 1) { alert(strings.noOpenDocument, strings.attention); exit(); }
-
-var dlg = app.dialogs.add({name:strings.name});
-with(dlg) {
-    with(dialogColumns.add()) {
-        with (dialogRows.add()) {
-            staticTexts.add({staticLabel:strings.minWords});
-            var minWords = integerEditboxes.add({editValue:0, minWidth:25});
-        }
-        with (dialogRows.add()) {
-            staticTexts.add({staticLabel:strings.viewWithOutSpecial});
-        }
-        with (dialogRows.add()) {
-            var outSmbl = textEditboxes.add({editContents:excludeSymbols, minWidth:340});
-        }
-        var chkWithOutSpace = checkboxControls.add({staticLabel:strings.viewWithOutSpaces, checkedState:false})
+    var strings = {
+        name: 'inCountChars 3.0',
+        minWords: 'Minimum words in Story',
+        viewWithOutSpaces: 'Show numbers characters without spaces',
+        viewWithOutSpecial: 'Show numbers characters without special symbols',
+        attention: 'Attention!',
+        noOpenDocument: 'No open documents!',
+        report: 'Report',
+        publication: 'Publication',
+        lines: 'Lines',
+        excludeStory: 'Excluded stories, where characters less than',
+        charsWithSpaces: 'characters with spaces',
+        charsWithoutSpaces: 'characters without spaces',
+        charsWithoutSymbols: 'characters exclude',
+        authorLists: 'Authors lists',
+        lessOneList: 'less than one authors list',
+        saveReport: 'Save report in file?',
+        textFiles: 'Text Files',
+        selectResultFile: 'Save Report File',
+        endWork: 'Report created!',
+        noSaveFile: 'File is not saved',
+        fileSaveAs: 'File save as',
+        createdWith: 'Created with script',
+        credits: ' by Vitaly Batushev\nhttps://github.com/vbatushev/InDesignScripts',
+        bars: '===============================',
     }
-}
-result = dlg.show();
-if (result == false) { dlg.destroy(); exit(); }
-var counter = new getCountChars();
-counter.exclude = outSmbl.editContents;
-counter.spaces = chkWithOutSpace.checkedState;
-counter.min = minWords.editValue;
-counter.run();
 
-function getCountChars() {
-    this.exclude = excludeSymbols;
-    this.min = 0;
-    this.spaces = false;
-    this.progress;
+    var config = {
+        exclude: excludeSymbols,
+        min: 0,
+        spaces: false,
+        progress: null
+    }
 
-    this.run = function() {
-        this.progress = new ProgressbarClass(app.activeDocument.stories.length, strings.name);
-        var chars = {spaces: 0, symbols: 0, total: 0 }
-        for (i = 0; i < app.activeDocument.stories.length; i++) {
-            var myStory = app.activeDocument.stories[i];
-            if (myStory.words.length > this.min) {
-                var symbols = this.getChars(myStory, false);
-                chars.total += symbols.total;
-                chars.spaces += symbols.spaces;
-                chars.symbols += symbols.symbols;
+    var run = function() {
+        if (app.documents.length < 1) { alert(strings.noOpenDocument, strings.attention); exit(); }
+        app.scriptPreferences.enableRedraw = true;
+        runDialog();
+        config.progress = new ProgressbarClass(app.activeDocument.stories.length, strings.name);
+        for (var a = 0,l = app.activeDocument.stories.length; a < l; a++) {
+            processStory(app.activeDocument.stories[a])
+            config.progress.increase();
+        }
+        save();
 
-                for (ti = 0; ti < myStory.tables.length; ti++) {
-                    var myTable = myStory.tables[ti];
-                    for (j = 0; j < myTable.cells.length; j++) {
-                        var tblSymbols = this.getChars(myTable.cells[j],false);
-                        chars.total += tblSymbols.total;
-                        chars.spaces += tblSymbols.spaces;
-                        chars.symbols += tblSymbols.symbols;
-                    }
+        function processStory(story) {
+            if (story.words.length > config.min) {
+                getChars(story, false);
+                for (var a = 0, l = story.tables.length; a < l; a++) {
+                    processCells(story.tables[a]);
                 }
+                processFootnote(story);
+                getLines(story);
+            }
+        }
 
-                for (f = 0; f < myStory.footnotes.length; f++) {
-                    var fSymbols = this.getChars(myStory.footnotes[f],true);
-                    chars.total += fSymbols.total;
-                    chars.spaces += fSymbols.spaces;
-                    chars.symbols += fSymbols.symbols;
+        function processCells(table) {
+            for (var a = 0, l = table.cells.length; a < l; a++) {
+                config.getChars(table.cells[a],false);
+            }
+        }
+
+        function processFootnote(story) {
+            for (var a = 0, l = story.footnotes.length; a < l; a++) {
+                getChars(story.footnotes[a], false);
+            }
+        }
+
+        function getLines(story) {
+            for (var a = 0, l = story.textContainers.length; a < l; a++) {
+                if (story.textContainers[a].lines !== null) {
+                    chars.lines += story.textContainers[a].lines.length;
                 }
             }
-            this.progress.increase();
         }
-        this.save(chars);
-        this.progress.close();
     }
 
-    this.save = function (result) {
-        var aList = Math.round(result.total/40000);
-        if (aList < 1) { aList = strings.lessOneList };
-        var txtReport = strings.bars + '\n' + strings.report + '\n' + strings.bars + '\n\n' +
-        strings.publication + ': ' + app.activeDocument.name + '\n\n' +
-        result.total + ' ' + strings.charsWithSpaces + '.' + '\n';
-        if (this.spaces){
-            txtReport += (result.total - result.spaces) + ' ' + strings.charsWithoutSpaces + '.' + '\n\n';
+    var save = function () {
+        var aList = Math.round(chars.total/40000);
+        if (aList < 1) { aList = strings.lessOneList; };
+        var report = strings.bars + '\n' + strings.report + '\n' + strings.bars + '\n\n' +
+        strings.publication + ': ' + app.activeDocument.name + '\n';
+        if (config.min) {
+            report += strings.excludeStory + " " + config.min + "\n";
         }
-        if (result.symbols > 0) {
-            txtReport += (result.total - result.symbols) + ' ' + strings.charsWithoutSymbols + " " + this.exclude + '.' + '\n\n';
+        report += "\n" + chars.total + ' ' + strings.charsWithSpaces + '.' + '\n';
+
+        if (config.spaces){
+            report += (chars.total - chars.spaces) + ' ' + strings.charsWithoutSpaces + '.' + '\n\n';
+        }
+        if (chars.symbols > 0) {
+            report += (chars.total - chars.symbols) + ' ' + strings.charsWithoutSymbols + " " + config.exclude + '.' + '\n\n';
+        }
+        if (chars.lines > 0) {
+            report += strings.lines + ': ' + chars.lines + '.' + '\n\n';
         }
 
-        txtReport = txtReport + strings.authorLists + ': ' + aList + '.' + '\n\n\n\n' + strings.bars + '\n' +
+        report = report + strings.authorLists + ': ' + aList + '.' + '\n\n' + strings.bars + '\n' +
         strings.createdWith + ' ' + strings.name + '\n' + strings.credits;
-        alert (txtReport, strings.name);
-
-        var myResultFile = new File (app.activeDocument.filePath + "/Otchet.txt");
-        myResultFile.encoding = 'UTF8';
-        myResultFile.open("w");
-        myResultFile.write(txtReport);
-        myResultFile.close();
-        myResultFile.execute();
+        config.progress.close();
+        alert(report, strings.name);
+        var reportFile = new File (app.activeDocument.filePath + "/report.txt");
+        reportFile.encoding = 'UTF8';
+        reportFile.open("w");
+        reportFile.write(report);
+        reportFile.close();
+        reportFile.execute();
     }
 
-    this.getChars = function(obj, footnote) {
-        var out = new Object();
+    var getChars = function(obj, footnote) {
         var content = obj.contents;
-        out.total = obj.characters.length;
+        chars.total += obj.characters.length;
         var  re = /\s/g;
         var tmpSpace = content.match(re);
-        if (tmpSpace === null) { out.spaces = 0; } else { out.spaces = tmpSpace.length; }
-        resetPrefs();
-        app.findGrepPreferences.findWhat = this.exclude;
+        if (tmpSpace !== null) { chars.spaces += tmpSpace.length; }
+        resetGrepPreferences();
+        app.findGrepPreferences.findWhat = config.exclude;
         var findSymbols;
         if (footnote) {
-            for (a = 0; a < obj.paragraphs.length; a++) {
+            for (var a = 0, l = obj.paragraphs.length; a < l; a++) {
                 app.findChangeObjectOptions.includeFootnotes = false;
                 findSymbols = obj.paragraphs[a].findGrep();
-                out.symbols = findSymbols.length;
+                chars.symbols += findSymbols.length;
             }
         } else {
             app.findChangeObjectOptions.includeFootnotes = true;
             findSymbols = obj.findGrep();
-            out.symbols = findSymbols.length;
+            chars.symbols += findSymbols.length;
         }
-        resetPrefs();
-        return out;
+        resetGrepPreferences();
     }
 
-    function resetPrefs() {
-        app.findGrepPreferences = null;
+    function resetGrepPreferences() {
         app.findGrepPreferences = null;
         app.changeGrepPreferences = null;
     }
@@ -187,4 +175,34 @@ function getCountChars() {
         this.setLabel = function (St) { this.windowRef.pnl.progBarLabel.text = St; };
         this.setPanelLabel = function (St) { this.windowRef.pnl.text = St; };
     }
-}
+
+    function runDialog() {
+        var dlg = app.dialogs.add({name:strings.name});
+        with (dlg) {
+            with(dialogColumns.add()) {
+                with (dialogRows.add()) {
+                    staticTexts.add({staticLabel:strings.minWords});
+                    var minWords = integerEditboxes.add({editValue:0, minWidth:25});
+                }
+                with (dialogRows.add()) {
+                    staticTexts.add({staticLabel:strings.viewWithOutSpecial});
+                }
+                with (dialogRows.add()) {
+                    var outSmbl = textEditboxes.add({editContents:excludeSymbols, minWidth:340});
+                }
+                var chkWithOutSpace = checkboxControls.add({staticLabel:strings.viewWithOutSpaces, checkedState:false})
+            }
+        }
+        result = dlg.show();
+        if (result == false) { dlg.destroy(); exit(); }
+        config.exclude = outSmbl.editContents;
+        config.spaces = chkWithOutSpace.checkedState;
+        config.min = minWords.editValue;
+    }
+
+    return {
+        run: run,
+        config: config
+    }
+})();
+InCounts.run();
