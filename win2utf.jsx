@@ -2,8 +2,8 @@
 * @Author: Vitaly Batushev
 * @E-Mail: vitaly@batushev.info
 * @Date:   2015-12-07 02:43:24
-* @Last Modified by:   Vitaly Batushev
-* @Last Modified time: 2016-03-19 22:08:54
+ * @Last Modified by: Vitaly Batushev
+ * @Last Modified time: 2017-06-13 13:19:27
 * @ScriptName  win2utf
 * @Version     1.0
 * @Description Скрипт для исправления неуникодных символов, которые появляются при использовании "корявых" шрифтов в импортируемой в InDesign публикации Adobe PageMaker.
@@ -45,14 +45,8 @@ var win2utf = (function(){
         app.changeGrepPreferences = null;
     }
 
-
-    var d2h = function(d) {
-        return d.toString(16);
-    }
-
-    var h2d = function(h) {
-        return parseInt(h,16);
-    }
+    var d2h = function(d) { return d.toString(16); }
+    var h2d = function(h) { return parseInt(h,16); }
 
     return {
         run: main

@@ -1,10 +1,10 @@
 ﻿/*
  * @Author: Vitaly Batushev
  * @Date: 2017-02-10 15:22:28
- * @Last Modified by: Vitaly Batushev
- * @Last Modified time: 2017-02-15 19:34:21
+ * @Last Modified by: Vitaly Batushev!!!
+ * @Last Modified time: 2017-08-28 13:35:40
  * @Name: InPoem
- * @Version: 2.0.1
+ * @Version: 2.1.0
  * @Email: vitaly@batushev.info
  * @Description:
  * Скрипт выравнивания строк стихотворения по самой длинной строке в нем
@@ -12,6 +12,7 @@
  * где ищет абзацы со стилями, указанными в параметрах head_styles (для заголовков стихотворений)
  * и text_styles (для основного текста стихотворений), которые и попадают под выравнивание
 */
+#target indesign
 
 /**
  * Конфигурация стилей
@@ -35,7 +36,7 @@ var InPoem = (function(){
         app.scriptPreferences.measurementUnit = MeasurementUnits.POINTS;
         testPublication();
         processTextFrames(app.selection[0].parentStory);
-        alert("Стихи обработаны.", "InPoem 2.0");
+        alert("Стихи обработаны.", "InPoem 2.1");
     }
 
     /**
@@ -62,7 +63,7 @@ var InPoem = (function(){
             var textFrame = story.textContainers[a];
             if (textFrame.characters.length == 0) { continue; }
             var re = new RegExp("([^\u000D]+)|($)", "gim");
-            var heads = seekRegexp(textFrame.contents, re);
+            var heads = seekRegexp(textFrame, re);
 
             Index.start = heads[0][0]; Index.end = 0;
             for (var i = 0, j = heads.length; i < j; i++) {
@@ -71,19 +72,19 @@ var InPoem = (function(){
                 var typeStyle = getTypeOfStyle(textFrame.characters[heads[i][1]].appliedParagraphStyle.name);
                 switch(typeStyle) {
                     case "head":
-                        if (Index.end > 0) { setIndents(textFrame); }
+                            if (Index.end > 0) setIndents(textFrame);
                         Index.start = heads[i][1] + 1;
                         break;
                     case "text":
                         Index.end = heads[i][1];
-                        if (i == heads.length - 1 && Index.end > 0) { setIndents(textFrame); }
+                        if (i == heads.length - 1 && Index.end > 0) setIndents(textFrame);
                         break;
                     default:
-                        if (Index.end > 0) { setIndents(textFrame); }
+                        if (Index.end > 0) setIndents(textFrame);
                         break;
                 }
             }
-             progress.increase();
+            progress.increase();
         }
         progress.close();
     }
@@ -95,11 +96,20 @@ var InPoem = (function(){
      * @param {Integer}     start   Индекс первого символа текста
      * @param {Integer}     end     Индекс последнего символа текста
      */
-    function setIndents(tf, start, end) {
+    function setIndents(tf) {
         var text = tf.characters.itemByRange(Index.start, Index.end);
         var indent = calcIndent(text, tf);
-        text.leftIndent = indent;
-        text.rightIndent = indent;
+        indent = Math.round(indent * 10) / 10;
+        for (var a = 0, l = text.lines.length; a < l; a++) {
+            var line = text.lines[a];
+            if (line.hasOwnProperty("appliedParagraphStyle")) {
+                var type = getTypeOfStyle(line.paragraphs[0].appliedParagraphStyle.name);
+                if  (type == 'head' || type == 'text') {
+                    line.leftIndent = indent;
+                    line.rightIndent = indent;
+                }
+            }
+        }
         Index.start = 0; Index.end = 0;
     }
 
@@ -114,10 +124,14 @@ var InPoem = (function(){
         var values = [];
         for (var a = 0, l = text.lines.length; a < l; a++) {
             var paragraph = text.lines[a];
-            var startIP = paragraph.insertionPoints.item(0);
-            var endIP = paragraph.insertionPoints.item(paragraph.insertionPoints.length - 2);
-            values.push(endIP.horizontalOffset - startIP.horizontalOffset);
+            var type = getTypeOfStyle(paragraph.appliedParagraphStyle[0].name);
+            if  (type == 'head' || type == 'text') {
+                var startIP = paragraph.insertionPoints.item(0);
+                var endIP = paragraph.insertionPoints.item(paragraph.insertionPoints.length - 2);
+                values.push(endIP.horizontalOffset - startIP.horizontalOffset);
+            }
         }
+        if (values.length == 0) { return 0; }
         values.sort(function(a, b) { return a - b; });
         width = tf.geometricBounds[3] - tf.geometricBounds[1];
         return (width - values[values.length - 1]) / 2;
@@ -130,14 +144,17 @@ var InPoem = (function(){
      * @param   {RegExp}  re     Регулярное выражение
      * @return  {Array}   Массив из найденных границ начала и конца
      */
-    function seekRegexp(text, re) {
-        var i = 0, result = [], found = text.match(re);
+    function seekRegexp(tf, re) {
+        var i = 0, result = [], text = tf.contents, found = text.match(re);
         if (!found) { return result; }
         for (var a = 0, l = found.length; a < l; a++) {
             var start = text.indexOf(found[a], i);
             var end = start + (found[a].length - 1);
-            result[a] = [start, end];
-            i = end;
+            var type = getTypeOfStyle(tf.characters[start].appliedParagraphStyle.name);
+            if (end > start && (type == 'head' || type == 'text')) {
+                result.push([start, end]);
+                i = end;
+            }
         }
         return result;
     }
