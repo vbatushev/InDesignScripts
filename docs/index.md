@@ -1,2 +1,0 @@
-# Vitaly Batushev's scripts
-
