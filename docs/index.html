@@ -3,12 +3,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>InDesign Scripts</title>
-    <base href="https://scripts.szam5.com">
+    <base href="http://scripts.szam5.com">
 
+    
+    <link rel="stylesheet" href="css/uikit.idscripts.css" />
 
-    <link rel="stylesheet" href="css/uikit.idscripts.min.css" />
-
-
+    
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.5.6/dist/js/uikit.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.5.6/dist/js/uikit-icons.min.js"></script>
 <body>
@@ -18,250 +18,194 @@
     </div>
 </nav>
     <div id="content" style="padding: 50px 0;">
-
+        
 
 <div class="uk-container uk-container-expand">
-    <div class="uk-grid-small uk-child-width-1-2@s uk-child-width-1-3@m uk-margin-top uk-grid-match"
-        uk-grid="masonry: true">
-
-        <div>
-            <div class="uk-card uk-card-small uk-card-hover uk-card-primary uk-box-shadow-small">
-                <div class="uk-card-header uk-flex uk-flex-between">
-                    <div class="uk-card-title uk-light">
-                            ExportInfoblocks
-                    </div>
-                    <div>
-                        <a class="uk-icon-button uk-text-right" href='https://raw.githubusercontent.com/vbatushev/InDesignScripts/master/ExportInfoblocks.jsx'
-                            uk-icon="icon: download"
-                            title="Скачать ExportInfoblocks"></a>
-                    </div>
-                </div>
-                <div class="uk-card-body uk-background-muted uk-text-secondary">
-
-                    <p>Экспорт текста публикации в формат CSV по информационным блокам согласно стилям, определяемым в массиве ExportInfoblock.config.styles. Исходное задание можно посмотреть <a href="http://forum.rudtp.ru/threads/indesign-to-csv.65159/" rel="nofollow">здесь</a></p>
-
-                </div>
-            </div>
+    
+        
+    <div uk-grid>
+        <div class="uk-width-auto@m">
+            <ul class="uk-tab-left" uk-tab="connect: #script-descriptoins; animation: uk-animation-fade">
+            
+                <li><a href="#">ExportInfoblocks</a></li>
+            
+                <li><a href="#">ImageConvertor</a></li>
+            
+                <li><a href="#">img2str</a></li>
+            
+                <li><a href="#">InBackup</a></li>
+            
+                <li><a href="#">InCountChars</a></li>
+            
+                <li><a href="#">InPoem2</a></li>
+            
+                <li><a href="#">ParagraphsToTextFrames</a></li>
+            
+                <li><a href="#">RecoveryINDD</a></li>
+            
+                <li><a href="#">selectPagesByMaster</a></li>
+            
+                <li><a href="#">win2utf</a></li>
+            
+                <li><a href="#">XMLinksCleaner</a></li>
+            
+            </ul>
         </div>
-
-        <div>
-            <div class="uk-card uk-card-small uk-card-hover uk-card-primary uk-box-shadow-small">
-                <div class="uk-card-header uk-flex uk-flex-between">
-                    <div class="uk-card-title uk-light">
-                            ImageConvertor
-                    </div>
-                    <div>
-                        <a class="uk-icon-button uk-text-right" href='https://raw.githubusercontent.com/vbatushev/InDesignScripts/master/ImageConvertor.jsx'
-                            uk-icon="icon: download"
-                            title="Скачать ImageConvertor"></a>
-                    </div>
-                </div>
-                <div class="uk-card-body uk-background-muted uk-text-secondary">
-
-                    <p>Конвертация векторных изображений (EPS и WMF) в EPS/AI/TIFF/PSD с помощью Adobe Illustrator</p>
-
-                </div>
-            </div>
-        </div>
-
-        <div>
-            <div class="uk-card uk-card-small uk-card-hover uk-card-primary uk-box-shadow-small">
-                <div class="uk-card-header uk-flex uk-flex-between">
-                    <div class="uk-card-title uk-light">
-                            img2str
-                    </div>
-                    <div>
-                        <a class="uk-icon-button uk-text-right" href='https://raw.githubusercontent.com/vbatushev/InDesignScripts/master/img2str.jsx'
-                            uk-icon="icon: download"
-                            title="Скачать img2str"></a>
-                    </div>
-                </div>
-                <div class="uk-card-body uk-background-muted uk-text-secondary">
-
-                    <p>Создание текстового представления изображения для использования его внутри скрипта.</p>
-
-                </div>
-            </div>
-        </div>
-
-        <div>
-            <div class="uk-card uk-card-small uk-card-hover uk-card-primary uk-box-shadow-small">
-                <div class="uk-card-header uk-flex uk-flex-between">
-                    <div class="uk-card-title uk-light">
-                            InBackup
-                    </div>
-                    <div>
-                        <a class="uk-icon-button uk-text-right" href='https://raw.githubusercontent.com/vbatushev/InDesignScripts/master/InBackup.jsx'
-                            uk-icon="icon: download"
-                            title="Скачать InBackup"></a>
-                    </div>
-                </div>
-                <div class="uk-card-body uk-background-muted uk-text-secondary">
-
-                    <p>Создание резервных копий документа в папке указываемой пользователем. Для использования необходимо (пере)назначить горячую клавишу сохранения документа на этот скрипт.</p>
-
-                </div>
-            </div>
-        </div>
-
-        <div>
-            <div class="uk-card uk-card-small uk-card-hover uk-card-primary uk-box-shadow-small">
-                <div class="uk-card-header uk-flex uk-flex-between">
-                    <div class="uk-card-title uk-light">
-                            InCountChars
-                    </div>
-                    <div>
-                        <a class="uk-icon-button uk-text-right" href='https://raw.githubusercontent.com/vbatushev/InDesignScripts/master/InCountChars.jsx'
-                            uk-icon="icon: download"
-                            title="Скачать InCountChars"></a>
-                    </div>
-                </div>
-                <div class="uk-card-body uk-background-muted uk-text-secondary">
-
-                    <p>Статистика о количестве знаков в публикации</p>
-
-                    <p>Можно исключать из подсчета определенные символы, указав их в списке исключаемых символов.</p>
-
-                    <p>Список составляется в формате GREP. Можно использовать GREP-символы Adobe InDesign.</p>
-
-                    <p>При перечислении символы разделяются символом |</p>
-
-                    <p>Например, нижеследующая настройка исключает из подсчета неразрывный дефис:</p>
-
-                    <p><pre>var excludeSymbols = "~-";</pre></p>
-
-                </div>
-            </div>
-        </div>
-
-        <div>
-            <div class="uk-card uk-card-small uk-card-hover uk-card-primary uk-box-shadow-small">
-                <div class="uk-card-header uk-flex uk-flex-between">
-                    <div class="uk-card-title uk-light">
-                            InPoem2
-                    </div>
-                    <div>
-                        <a class="uk-icon-button uk-text-right" href='https://raw.githubusercontent.com/vbatushev/InDesignScripts/master/InPoem2.jsx'
-                            uk-icon="icon: download"
-                            title="Скачать InPoem2"></a>
-                    </div>
-                </div>
-                <div class="uk-card-body uk-background-muted uk-text-secondary">
-
-                    <p>Скрипт выравнивания строк стихотворения по самой длинной строке в нем.</p>
-
-                    <p>Обходит все текстовые фреймы, относящиеся к материалу (Story) выделенного текстового фрейма, где ищет абзацы со стилями, указанными в параметрах head_styles (для заголовков стихотворений) и text_styles (для основного текста стихотворений), которые и попадают под выравнивание.</p>
-
-                </div>
-            </div>
-        </div>
-
-        <div>
-            <div class="uk-card uk-card-small uk-card-hover uk-card-primary uk-box-shadow-small">
-                <div class="uk-card-header uk-flex uk-flex-between">
-                    <div class="uk-card-title uk-light">
-                            ParagraphsToTextFrames
-                    </div>
-                    <div>
-                        <a class="uk-icon-button uk-text-right" href='https://raw.githubusercontent.com/vbatushev/InDesignScripts/master/ParagraphsToTextFrames.jsx'
-                            uk-icon="icon: download"
-                            title="Скачать ParagraphsToTextFrames"></a>
-                    </div>
-                </div>
-                <div class="uk-card-body uk-background-muted uk-text-secondary">
-
-                    <p>Скрипт ищет в тексте абзацы указанного пользователем стиля и оборачивает их в текстовый фрейм, который заменяет данный абзац в текстовом потоке.</p>
-
-                </div>
-            </div>
-        </div>
-
-        <div>
-            <div class="uk-card uk-card-small uk-card-hover uk-card-primary uk-box-shadow-small">
-                <div class="uk-card-header uk-flex uk-flex-between">
-                    <div class="uk-card-title uk-light">
-                            RecoveryINDD
-                    </div>
-                    <div>
-                        <a class="uk-icon-button uk-text-right" href='https://raw.githubusercontent.com/vbatushev/InDesignScripts/master/RecoveryINDD.jsx'
-                            uk-icon="icon: download"
-                            title="Скачать RecoveryINDD"></a>
-                    </div>
-                </div>
-                <div class="uk-card-body uk-background-muted uk-text-secondary">
-
-                    <p>Скрипт для «лечения» или уменьшения размера публикации Adobe InDesign.</p>
-
-                    <p>Принцип работы в пересборке публикации на основе генерируемого из нее файла IDML.</p>
-
-                </div>
-            </div>
-        </div>
-
-        <div>
-            <div class="uk-card uk-card-small uk-card-hover uk-card-primary uk-box-shadow-small">
-                <div class="uk-card-header uk-flex uk-flex-between">
-                    <div class="uk-card-title uk-light">
-                            selectPagesByMaster
-                    </div>
-                    <div>
-                        <a class="uk-icon-button uk-text-right" href='https://raw.githubusercontent.com/vbatushev/InDesignScripts/master/selectPagesByMaster.jsx'
-                            uk-icon="icon: download"
-                            title="Скачать selectPagesByMaster"></a>
-                    </div>
-                </div>
-                <div class="uk-card-body uk-background-muted uk-text-secondary">
-
-                    <p>Выделение страниц выбранного шаблона.</p>
-
-                </div>
-            </div>
-        </div>
-
-        <div>
-            <div class="uk-card uk-card-small uk-card-hover uk-card-primary uk-box-shadow-small">
-                <div class="uk-card-header uk-flex uk-flex-between">
-                    <div class="uk-card-title uk-light">
-                            win2utf
-                    </div>
-                    <div>
-                        <a class="uk-icon-button uk-text-right" href='https://raw.githubusercontent.com/vbatushev/InDesignScripts/master/win2utf.jsx'
-                            uk-icon="icon: download"
-                            title="Скачать win2utf"></a>
-                    </div>
-                </div>
-                <div class="uk-card-body uk-background-muted uk-text-secondary">
-
-                    <p>Скрипт для исправления неуникодных символов, которые появляются при использовании корявых шрифтов в импортируемой в InDesign публикации Adobe PageMaker.</p>
-
-                </div>
-            </div>
-        </div>
-
-        <div>
-            <div class="uk-card uk-card-small uk-card-hover uk-card-primary uk-box-shadow-small">
-                <div class="uk-card-header uk-flex uk-flex-between">
-                    <div class="uk-card-title uk-light">
-                            XMLinksCleaner
-                    </div>
-                    <div>
-                        <a class="uk-icon-button uk-text-right" href='https://raw.githubusercontent.com/vbatushev/InDesignScripts/master/XMLinksCleaner.jsx'
-                            uk-icon="icon: download"
-                            title="Скачать XMLinksCleaner"></a>
-                    </div>
-                </div>
-                <div class="uk-card-body uk-background-muted uk-text-secondary">
-
-                    <p>Порой возникают ситуации, когда в InDesign появляются богомерзкие ссылки на изображения, которые не входят в компоновку, а являются структурным элементом XML.</p>
-
-                    <p>В сведениях о странице написано: XML structure element, not in layout (Структурный элемент XML, в компоновку не входит).</p>
-
-                    <p>Исправить весь этот ужасъ и смрадъ призван данный скрипт.</p>
-
-                </div>
-            </div>
-        </div>
-
+         <div class="uk-width-expand@m">
+             <ul id="script-descriptoins" class="uk-switcher">
+                
+                    <li class="uk-padding-small">
+                        <h3>ExportInfoblocks</h3>
+                        
+                        <p>Экспорт текста публикации в формат CSV по информационным блокам согласно стилям, определяемым в массиве ExportInfoblock.config.styles. Исходное задание можно посмотреть <a href="http://forum.rudtp.ru/threads/indesign-to-csv.65159/" rel="nofollow">здесь</a></p>
+                        
+                        <p>
+                            <a class="uk-button uk-button-primary uk-button-small"
+                            href='https://raw.githubusercontent.com/vbatushev/InDesignScripts/master/ExportInfoblocks.jsx'
+                            title="Скачать ExportInfoblocks">Скачать ExportInfoblocks &nbsp;</a>
+                        </p>
+                    </li>
+                
+                    <li class="uk-padding-small">
+                        <h3>ImageConvertor</h3>
+                        
+                        <p>Конвертация векторных изображений (EPS и WMF) в EPS/AI/TIFF/PSD с помощью Adobe Illustrator</p>
+                        
+                        <p>
+                            <a class="uk-button uk-button-primary uk-button-small"
+                            href='https://raw.githubusercontent.com/vbatushev/InDesignScripts/master/ImageConvertor.jsx'
+                            title="Скачать ImageConvertor">Скачать ImageConvertor &nbsp;</a>
+                        </p>
+                    </li>
+                
+                    <li class="uk-padding-small">
+                        <h3>img2str</h3>
+                        
+                        <p>Создание текстового представления изображения для использования его внутри скрипта.</p>
+                        
+                        <p>
+                            <a class="uk-button uk-button-primary uk-button-small"
+                            href='https://raw.githubusercontent.com/vbatushev/InDesignScripts/master/img2str.jsx'
+                            title="Скачать img2str">Скачать img2str &nbsp;</a>
+                        </p>
+                    </li>
+                
+                    <li class="uk-padding-small">
+                        <h3>InBackup</h3>
+                        
+                        <p>Создание резервных копий документа в папке указываемой пользователем. Для использования необходимо (пере)назначить горячую клавишу сохранения документа на этот скрипт.</p>
+                        
+                        <p>
+                            <a class="uk-button uk-button-primary uk-button-small"
+                            href='https://raw.githubusercontent.com/vbatushev/InDesignScripts/master/InBackup.jsx'
+                            title="Скачать InBackup">Скачать InBackup &nbsp;</a>
+                        </p>
+                    </li>
+                
+                    <li class="uk-padding-small">
+                        <h3>InCountChars</h3>
+                        
+                        <p>Статистика о количестве знаков в публикации</p>
+                        
+                        <p>Можно исключать из подсчета определенные символы, указав их в списке исключаемых символов.</p>
+                        
+                        <p>Список составляется в формате GREP. Можно использовать GREP-символы Adobe InDesign.</p>
+                        
+                        <p>При перечислении символы разделяются символом |</p>
+                        
+                        <p>Например, нижеследующая настройка исключает из подсчета неразрывный дефис:</p>
+                        
+                        <p><pre>var excludeSymbols = "~-";</pre></p>
+                        
+                        <p>
+                            <a class="uk-button uk-button-primary uk-button-small"
+                            href='https://raw.githubusercontent.com/vbatushev/InDesignScripts/master/InCountChars.jsx'
+                            title="Скачать InCountChars">Скачать InCountChars &nbsp;</a>
+                        </p>
+                    </li>
+                
+                    <li class="uk-padding-small">
+                        <h3>InPoem2</h3>
+                        
+                        <p>Скрипт выравнивания строк стихотворения по самой длинной строке в нем.</p>
+                        
+                        <p>Обходит все текстовые фреймы, относящиеся к материалу (Story) выделенного текстового фрейма, где ищет абзацы со стилями, указанными в параметрах head_styles (для заголовков стихотворений) и text_styles (для основного текста стихотворений), которые и попадают под выравнивание.</p>
+                        
+                        <p>
+                            <a class="uk-button uk-button-primary uk-button-small"
+                            href='https://raw.githubusercontent.com/vbatushev/InDesignScripts/master/InPoem2.jsx'
+                            title="Скачать InPoem2">Скачать InPoem2 &nbsp;</a>
+                        </p>
+                    </li>
+                
+                    <li class="uk-padding-small">
+                        <h3>ParagraphsToTextFrames</h3>
+                        
+                        <p>Скрипт ищет в тексте абзацы указанного пользователем стиля и оборачивает их в текстовый фрейм, который заменяет данный абзац в текстовом потоке.</p>
+                        
+                        <p>
+                            <a class="uk-button uk-button-primary uk-button-small"
+                            href='https://raw.githubusercontent.com/vbatushev/InDesignScripts/master/ParagraphsToTextFrames.jsx'
+                            title="Скачать ParagraphsToTextFrames">Скачать ParagraphsToTextFrames &nbsp;</a>
+                        </p>
+                    </li>
+                
+                    <li class="uk-padding-small">
+                        <h3>RecoveryINDD</h3>
+                        
+                        <p>Скрипт для «лечения» или уменьшения размера публикации Adobe InDesign.</p>
+                        
+                        <p>Принцип работы в пересборке публикации на основе генерируемого из нее файла IDML.</p>
+                        
+                        <p>
+                            <a class="uk-button uk-button-primary uk-button-small"
+                            href='https://raw.githubusercontent.com/vbatushev/InDesignScripts/master/RecoveryINDD.jsx'
+                            title="Скачать RecoveryINDD">Скачать RecoveryINDD &nbsp;</a>
+                        </p>
+                    </li>
+                
+                    <li class="uk-padding-small">
+                        <h3>selectPagesByMaster</h3>
+                        
+                        <p>Выделение страниц выбранного шаблона.</p>
+                        
+                        <p>
+                            <a class="uk-button uk-button-primary uk-button-small"
+                            href='https://raw.githubusercontent.com/vbatushev/InDesignScripts/master/selectPagesByMaster.jsx'
+                            title="Скачать selectPagesByMaster">Скачать selectPagesByMaster &nbsp;</a>
+                        </p>
+                    </li>
+                
+                    <li class="uk-padding-small">
+                        <h3>win2utf</h3>
+                        
+                        <p>Скрипт для исправления неуникодных символов, которые появляются при использовании корявых шрифтов в импортируемой в InDesign публикации Adobe PageMaker.</p>
+                        
+                        <p>
+                            <a class="uk-button uk-button-primary uk-button-small"
+                            href='https://raw.githubusercontent.com/vbatushev/InDesignScripts/master/win2utf.jsx'
+                            title="Скачать win2utf">Скачать win2utf &nbsp;</a>
+                        </p>
+                    </li>
+                
+                    <li class="uk-padding-small">
+                        <h3>XMLinksCleaner</h3>
+                        
+                        <p>Порой возникают ситуации, когда в InDesign появляются богомерзкие ссылки на изображения, которые не входят в компоновку, а являются структурным элементом XML.</p>
+                        
+                        <p>В сведениях о странице написано: XML structure element, not in layout (Структурный элемент XML, в компоновку не входит).</p>
+                        
+                        <p>Исправить весь этот ужасъ и смрадъ призван данный скрипт.</p>
+                        
+                        <p>
+                            <a class="uk-button uk-button-primary uk-button-small"
+                            href='https://raw.githubusercontent.com/vbatushev/InDesignScripts/master/XMLinksCleaner.jsx'
+                            title="Скачать XMLinksCleaner">Скачать XMLinksCleaner &nbsp;</a>
+                        </p>
+                    </li>
+                
+             </ul>
+         </div>
     </div>
 </div>
 

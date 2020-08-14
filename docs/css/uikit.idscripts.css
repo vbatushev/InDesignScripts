@@ -12500,3 +12500,12 @@ iframe.uk-cover {
     page-break-after: avoid;
   }
 }
+.uk-tab > * > a {
+  text-transform: none;
+}
+.uk-tab > .uk-active {
+  background: rgba(30, 135, 240, 0.1);
+}
+.uk-tab > .uk-active > a {
+  color: #1e87f0;
+}
