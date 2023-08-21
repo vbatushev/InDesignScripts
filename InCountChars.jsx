@@ -3,7 +3,7 @@
  * @Date:   2015-09-01 09:25:06
  * @Version:    3.0.1
  * @Last Modified by: Vitaly Batushev
- * @Last Modified time: 2017-03-07 20:42:24
+ * @Last Modified time: 2023-08-21 18:02:58
 */
 
 var InCounts = (function() {
@@ -11,7 +11,7 @@ var InCounts = (function() {
     var chars = {spaces: 0, symbols: 0, total: 0, lines: 0}
 
     var strings = {
-        name: 'inCountChars 3.0',
+        name: 'inCountChars 3.0.1',
         minWords: 'Minimum words in Story',
         viewWithOutSpaces: 'Show numbers characters without spaces',
         viewWithOutSpecial: 'Show numbers characters without special symbols',
