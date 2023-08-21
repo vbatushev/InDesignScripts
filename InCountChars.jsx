@@ -1,7 +1,7 @@
 ﻿/*
  * @Author: Vitaly Batushev
  * @Date:   2015-09-01 09:25:06
- * @Version:    3.0
+ * @Version:    3.0.1
  * @Last Modified by: Vitaly Batushev
  * @Last Modified time: 2017-03-07 20:42:24
 */
@@ -56,7 +56,7 @@ var InCounts = (function() {
         save();
 
         function processStory(story) {
-            if (story.words.length > config.min) {
+            if (story.words.length >= config.min || story.tables.length) {
                 getChars(story, false);
                 for (var a = 0, l = story.tables.length; a < l; a++) {
                     processCells(story.tables[a]);
@@ -68,7 +68,7 @@ var InCounts = (function() {
 
         function processCells(table) {
             for (var a = 0, l = table.cells.length; a < l; a++) {
-                config.getChars(table.cells[a],false);
+                getChars(table.cells[a],false);
             }
         }
 
@@ -111,12 +111,14 @@ var InCounts = (function() {
         strings.createdWith + ' ' + strings.name + '\n' + strings.credits;
         config.progress.close();
         alert(report, strings.name);
-        var reportFile = new File (app.activeDocument.filePath + "/report.txt");
-        reportFile.encoding = 'UTF8';
-        reportFile.open("w");
-        reportFile.write(report);
-        reportFile.close();
-        reportFile.execute();
+        try {
+            var reportFile = new File (app.activeDocument.filePath + "/report.txt");
+            reportFile.encoding = 'UTF8';
+            reportFile.open("w");
+            reportFile.write(report);
+            reportFile.close();
+            reportFile.execute();
+        } catch(e) {}
     }
 
     var getChars = function(obj, footnote) {
