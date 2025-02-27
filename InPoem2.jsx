@@ -2,9 +2,9 @@
  * @Author: Vitaly Batushev
  * @Date: 2017-02-10 15:22:28
  * @Last Modified by: Vitaly Batushev
- * @Last Modified time: 2025-02-27 19:14:44
+ * @Last Modified time: 2025-02-27 19:16:33
  * @Name: InPoem
- * @Version: 2.1.0
+ * @Version: 2.1.1
  * @Email: vitaly@batushev.info
  * @Description:
  * Скрипт выравнивания строк стихотворения по самой длинной строке в нем
