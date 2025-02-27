@@ -1,8 +1,8 @@
 ﻿/*
  * @Author: Vitaly Batushev
  * @Date: 2017-02-10 15:22:28
- * @Last Modified by: Vitaly Batushev!!!
- * @Last Modified time: 2017-08-28 13:35:40
+ * @Last Modified by: Vitaly Batushev
+ * @Last Modified time: 2025-02-27 19:14:44
  * @Name: InPoem
  * @Version: 2.1.0
  * @Email: vitaly@batushev.info
@@ -16,38 +16,49 @@
 
 /**
  * Конфигурация стилей
- * @head_style — стиль заголовков стихов
- * @text_style — стиль основного текста стихов
- * @date_style — стиль даты стихов
+ * head_style — стиль заголовков стихов
+ * text_style — стиль основного текста стихов
  */
 var styles = {
     head_styles: ["Заголовок стихотворения"],
     text_styles: ["Стихи"]
 }
 
-var InPoem = (function(){
+var InPoem = (function () {
     var config = { head_styles: [], text_styles: [] }
     var Index = { start: 0, end: 0 }
 
     /**
      * Основная функция объекта InPoem
      */
-    var main = function() {
+    var main = function () {
         app.scriptPreferences.measurementUnit = MeasurementUnits.POINTS;
         testPublication();
         processTextFrames(app.selection[0].parentStory);
-        alert("Стихи обработаны.", "InPoem 2.1");
+        alert("Стихи обработаны.", "InPoem 2.1.1");
     }
 
     /**
      * Проверка публикации на возможность выполнения скрипта
      * При невозможности скрипт сообщает о причине отказа
      */
-    var testPublication = function() {
+    var testPublication = function () {
         if (app.documents.length < 1) { alert("Нет открытых публикаций!\nОткрой публикацию и попробуйте снова.", "Ошибка", true); exit(); }
         if (app.selection.length < 1) { alert("Ничего не выделено!\nВыделите текстовый фрейм и попробуйте снова.", "Ошибка", true); exit(); }
         if (app.selection[0].constructor.name != "TextFrame") {
             alert("Выделенный объект не является текстовым фреймов!\nВыделите текстовый фрейм и попробуйте снова.", "Ошибка", true); exit();
+        }
+        for (var i = 0; i < config.head_styles.length; i++) {
+            if (!app.activeDocument.paragraphStyles.itemByName(config.head_styles[i]).isValid) {
+                alert("Стиль " + config.head_styles[i] + " не найден!", "Ошибка", true);
+                exit();
+            }
+        }
+        for (var i = 0; i < config.text_styles.length; i++) {
+            if (!app.activeDocument.paragraphStyles.itemByName(config.text_styles[i]).isValid) {
+                alert("Стиль " + config.text_styles[i] + " не найден!", "Ошибка", true);
+                exit();
+            }
         }
     }
 
@@ -55,7 +66,7 @@ var InPoem = (function(){
      * Обработка текстового фрейма, относящихся к parentStory
      * @param  {Story}  story   Объект Story, текстовые фреймы которого необходимо обработать
      */
-    var processTextFrames = function(story) {
+    var processTextFrames = function (story) {
         var textContainersLength = story.textContainers.length;
         var progress = new ProgressbarClass(textContainersLength, "Обрабатываются текстовые фреймы", "InPoem 2.0", false);
         for (var a = 0, l = story.textContainers.length; a < l; a++) {
@@ -70,14 +81,18 @@ var InPoem = (function(){
                 if (heads[i][1] < 0) { continue; }
                 if (!textFrame.characters[heads[i][1]].isValid) { continue; }
                 var typeStyle = getTypeOfStyle(textFrame.characters[heads[i][1]].appliedParagraphStyle.name);
-                switch(typeStyle) {
+                switch (typeStyle) {
                     case "head":
-                            if (Index.end > 0) setIndents(textFrame);
+                        if (Index.end > 0) {
+                            setIndents(textFrame);
+                        }
                         Index.start = heads[i][1] + 1;
                         break;
                     case "text":
                         Index.end = heads[i][1];
-                        if (i == heads.length - 1 && Index.end > 0) setIndents(textFrame);
+                        if (i == heads.length - 1 && Index.end > 0) {
+                            setIndents(textFrame);
+                        }
                         break;
                     default:
                         if (Index.end > 0) setIndents(textFrame);
@@ -102,9 +117,16 @@ var InPoem = (function(){
         indent = Math.round(indent * 10) / 10;
         for (var a = 0, l = text.lines.length; a < l; a++) {
             var line = text.lines[a];
+            if (!line.isValid) continue;
             if (line.hasOwnProperty("appliedParagraphStyle")) {
-                var type = getTypeOfStyle(line.paragraphs[0].appliedParagraphStyle.name);
-                if  (type == 'head' || type == 'text') {
+                var type;
+                if (!line.appliedParagraphStyle.name) {
+                    type = getTypeOfStyle(line.appliedParagraphStyle[0].name);
+                } else {
+                    type = getTypeOfStyle(line.appliedParagraphStyle.name);
+                }
+
+                if (type == 'head' || type == 'text') {
                     line.leftIndent = indent;
                     line.rightIndent = indent;
                 }
@@ -125,14 +147,14 @@ var InPoem = (function(){
         for (var a = 0, l = text.lines.length; a < l; a++) {
             var paragraph = text.lines[a];
             var type = getTypeOfStyle(paragraph.appliedParagraphStyle[0].name);
-            if  (type == 'head' || type == 'text') {
+            if (type == 'head' || type == 'text') {
                 var startIP = paragraph.insertionPoints.item(0);
                 var endIP = paragraph.insertionPoints.item(paragraph.insertionPoints.length - 2);
                 values.push(endIP.horizontalOffset - startIP.horizontalOffset);
             }
         }
         if (values.length == 0) { return 0; }
-        values.sort(function(a, b) { return a - b; });
+        values.sort(function (a, b) { return a - b; });
         width = tf.geometricBounds[3] - tf.geometricBounds[1];
         return (width - values[values.length - 1]) / 2;
     }
@@ -195,12 +217,12 @@ var InPoem = (function(){
      * @method setInfo(str)                 Устанавливает новое значение текста под индикатором
      */
 
-    function ProgressbarClass (maxValue, barLabel, panelTitle, viewInfo) {
+    function ProgressbarClass(maxValue, barLabel, panelTitle, viewInfo) {
         var panelTitle = panelTitle || Locales.ProgressBar.panelTitle;
         var viewInfo = viewInfo || false;
         var Info = "";
 
-        var win = new Window("palette", "", undefined, { closeButton:true, maximizeButton:false, minimizeButton:false, resizeable:false, borderless: false});
+        var win = new Window("palette", "", undefined, { closeButton: true, maximizeButton: false, minimizeButton: false, resizeable: false, borderless: false });
         this.windowRef = win;
 
         if (viewInfo) {
@@ -208,7 +230,7 @@ var InPoem = (function(){
             win.pnl.progBarLabel = win.pnl.add("statictext", [20, 15, 405, 30], barLabel);
             win.pnl.progBar = win.pnl.add("progressbar", [20, 35, 405, 60], 0, maxValue);
             win.pnl.log = win.pnl.add("panel", [20, 65, 405, 175], "");
-            win.pnl.log.info = win.pnl.log.add("statictext", [5, 5, 385, 150], Info, {multiline: true, scrolling: false});
+            win.pnl.log.info = win.pnl.log.add("statictext", [5, 5, 385, 150], Info, { multiline: true, scrolling: false });
             win.pnl.log.info.visible = true;
         } else {
             win.pnl = win.add("panel", [10, 10, 440, 100], panelTitle);
@@ -216,12 +238,12 @@ var InPoem = (function(){
             win.pnl.progBar = win.pnl.add("progressbar", [20, 35, 405, 60], 0, maxValue);
         }
 
-        win.cancelBtn  = win.add("button", [0, 0, 0, 0], "Отменить");
+        win.cancelBtn = win.add("button", [0, 0, 0, 0], "Отменить");
         win.cancelBtn.visible = true;
-        win.cancelElement = win.cancelBtn ;
+        win.cancelElement = win.cancelBtn;
         this.terminated = false;
 
-        win.onCancel = function() {
+        win.onCancel = function () {
             this.isDone = true;
             return true;
         }
@@ -229,7 +251,7 @@ var InPoem = (function(){
         win.center();
         win.show();
 
-        this.close = function() {
+        this.close = function () {
             win.close();
         };
         this.reset = function (maxValue, barLabel) {
@@ -254,4 +276,5 @@ var InPoem = (function(){
 
 InPoem.config.head_styles = styles.head_styles;
 InPoem.config.text_styles = styles.text_styles;
-InPoem.run();
+app.doScript("InPoem.run();", ScriptLanguage.JAVASCRIPT, [], UndoModes.ENTIRE_SCRIPT, "InPoem 2");
+// InPoem.run();
